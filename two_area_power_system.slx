@@ -1,0 +1,37 @@
+% Define model parameters
+% Two-area power system with PV and wind farm integration
+
+% Area 1 parameters
+P1 = 100; % Power in MW
+H1 = 5; % Inertia constant
+D1 = 1; % Damping factor
+
+% Area 2 parameters
+P2 = 100; % Power in MW
+H2 = 5; % Inertia constant
+D2 = 1; % Damping factor
+
+% PV and wind farm parameters
+P_PV = 50; % PV power in MW
+P_Wind = 30; % Wind farm power in MW
+
+% State-space representation
+A = [-D1/H1, P_PV/H1; 0, -D2/H2];
+B = [1/H1; 0];
+C = [1, 0];
+D = 0;
+
+% Create the state-space system
+sys = ss(A, B, C, D);
+
+% Simulate the system
+time = 0:0.1:10;
+[y,t,x] = lsim(sys, P1+P_Wind, time);
+
+% Plot the results
+figure;
+plot(t, y);
+title('Two-Area Power System Response');
+xlabel('Time (s)');
+ylabel('Output Power (MW)');
+grid on;
